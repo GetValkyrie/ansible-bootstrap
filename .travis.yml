@@ -22,6 +22,6 @@ script:
   - "which ansible"
   - "ansible -h| grep \"Usage: ansible\""
   - "which ansible-playbook"
-  - "ansible -h| grep \"Usage: ansible-playbook\""
+  - "ansible-playbook -h| grep \"Usage: ansible-playbook\""
   - "which ansible-galaxy"
-  - "ansible -h| grep \"Usage: ansible-galaxy\""
+  - "ansible-galaxy -h| grep \"Usage: ansible-galaxy\""

@@ -17,11 +17,11 @@ before_install:
   - chmod 700 ~/.python-eggs
 
 script:
-  - curl https://raw.githubusercontent.com/GetValkyrie/ansible-bootstrap/master/install-ansible.sh|sudo /bin/sh
+  - "curl https://raw.githubusercontent.com/GetValkyrie/ansible-bootstrap/master/install-ansible.sh|sudo /bin/sh"
   # Check that expected executables are available
-  - which ansible
-  - ansible -h| grep "Usage: ansible"
-  - which ansible-playbook
-  - ansible -h| grep "Usage: ansible-playbook"
-  - which ansible-galaxy
-  - ansible -h| grep "Usage: ansible-galaxy"
+  - "which ansible"
+  - "ansible -h| grep \"Usage: ansible\""
+  - "which ansible-playbook"
+  - "ansible -h| grep \"Usage: ansible-playbook\""
+  - "which ansible-galaxy"
+  - "ansible -h| grep \"Usage: ansible-galaxy\""

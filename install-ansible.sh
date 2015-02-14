@@ -5,6 +5,22 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+while getopts ":c:" opt; do
+  case $opt in
+    c)
+      checkout=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
+
 which ansible >/dev/null 2>&1
 if [ $? -eq 1 ]; then
 
@@ -16,6 +32,12 @@ if [ $? -eq 1 ]; then
   if [ ! -d $ansible_dir ]; then
     echo "Cloning Ansible."
     git clone --quiet --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir >/dev/null 2>&1
+  fi
+
+  if [ $checkout ]; then
+    echo "Checking out '$checkout'."
+    cd $ansible_dir
+    git checkout $checkout --quiet
   fi
 
   echo "Running setups tasks for Ansible."

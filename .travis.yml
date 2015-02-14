@@ -1,0 +1,27 @@
+---
+language: python
+python: "2.7"
+
+env:
+  - SITE=test.yml
+
+notifications:
+  slack:
+    secure: bPE/Z3M7j+dRLWtDRnA5cXO8M/AFCMZ9mHAH+H8q/ezCj+hlUW+kIPfIMnzS/b3h4uDUu/ieyQQtMO04Rb374GObdAPDBqbT2CgWZ1HGjBl6/4L+JH1iL5vVE8+Fa6u/HD+3nOpp
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install curl
+  # Avoid harmless (but annoying) warnings.
+  - mkdir ~/.python-eggs
+  - chmod 700 ~/.python-eggs
+
+script:
+  - curl https://raw.githubusercontent.com/GetValkyrie/ansible-bootstrap/master/install-ansible.sh|sudo /bin/sh
+  # Check that expected executables are available
+  - which ansible
+  - ansible -h| grep "Usage: ansible"
+  - which ansible-playbook
+  - ansible -h| grep "Usage: ansible-playbook"
+  - which ansible-galaxy
+  - ansible -h| grep "Usage: ansible-galaxy"

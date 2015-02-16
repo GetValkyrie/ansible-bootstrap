@@ -33,7 +33,7 @@ if [ $? -eq 1 ]; then
     apt-get -qq --force-yes install git python-setuptools python-dev > /dev/null 2>&1
   else
     apt-get --force-yes update
-    apt-get --force-yes install git python-setuptools
+    apt-get --force-yes install git python-setuptools python-dev
   fi
 
   ansible_dir=/usr/local/lib/ansible/

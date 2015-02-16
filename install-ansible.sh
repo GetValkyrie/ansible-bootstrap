@@ -34,6 +34,11 @@ if [ $? -eq 1 ]; then
     git clone --quiet --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir >/dev/null 2>&1
   fi
 
+  if [ -z $checkout ] && [ ! -z $ANSIBLE_CHECKOUT ]; then
+    echo "Setting checkout target from environment."
+    checkout=$ANSIBLE_CHECKOUT
+  fi
+
   if [ $checkout ]; then
     echo "Checking out '$checkout'."
     cd $ansible_dir

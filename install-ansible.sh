@@ -5,10 +5,13 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
-while getopts ":c:" opt; do
+while getopts ":c:d" opt; do
   case $opt in
     c)
       checkout=$OPTARG
+      ;;
+    d)
+      ANSIBLE_DEBUG=1
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2

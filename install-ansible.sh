@@ -24,13 +24,13 @@ while getopts ":c:d" opt; do
   esac
 done
 
-which ansible >/dev/null 2>&1
+which ansible > /dev/null 2>&1
 if [ $? -eq 1 ]; then
 
   echo "Installing Ansible build dependencies."
   if [ -z $ANSIBLE_DEBUG ]; then
     apt-get -qq --force-yes update > /dev/null 2>&1
-    apt-get -qq --force-yes install git python-setuptools >/dev/null 2>&1
+    apt-get -qq --force-yes install git python-setuptools python-dev > /dev/null 2>&1
   else
     apt-get --force-yes update
     apt-get --force-yes install git python-setuptools
@@ -40,7 +40,7 @@ if [ $? -eq 1 ]; then
   if [ ! -d $ansible_dir ]; then
     echo "Cloning Ansible."
     if [ -z $ANSIBLE_DEBUG ]; then
-      git clone --quiet --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir >/dev/null 2>&1
+      git clone --quiet --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir > /dev/null 2>&1
     else
       git clone --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir
     fi
@@ -64,7 +64,7 @@ if [ $? -eq 1 ]; then
   echo "Running setups tasks for Ansible."
   cd $ansible_dir
   if [ -z $ANSIBLE_DEBUG ]; then
-    python ./setup.py install >/dev/null 2>&1
+    python ./setup.py install > /dev/null 2>&1
   else
     python ./setup.py install
   fi

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+ANSIBLE_STABLE_BRANCH=stable-1.9
+
 if [ "$(id -u)" != "0" ]; then
   echo "Sorry, this script must be run as root."
   exit 1
@@ -40,9 +42,9 @@ if [ $? -eq 1 ]; then
   if [ ! -d $ansible_dir ]; then
     echo "Cloning Ansible."
     if [ -z $ANSIBLE_DEBUG ]; then
-      git clone --quiet --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir > /dev/null 2>&1
+      git clone --quiet --recursive git://github.com/ansible/ansible.git $ansible_dir > /dev/null 2>&1
     else
-      git clone --recursive --depth=1 git://github.com/ansible/ansible.git $ansible_dir
+      git clone --recursive git://github.com/ansible/ansible.git $ansible_dir
     fi
   fi
 
@@ -51,14 +53,17 @@ if [ $? -eq 1 ]; then
     checkout=$ANSIBLE_CHECKOUT
   fi
 
-  if [ $checkout ]; then
-    echo "Checking out '$checkout'."
-    cd $ansible_dir
-    if [ -z $ANSIBLE_DEBUG ]; then
-      git checkout $checkout --quiet
-    else
-      git checkout $checkout
-    fi
+  if [ -z $checkout ]; then
+    echo "Using default branch: $ANSIBLE_STABLE_BRANCH"
+    checkout=$ANSIBLE_STABLE_BRANCH
+  fi
+
+  echo "Checking out '$checkout'."
+  cd $ansible_dir
+  if [ -z $ANSIBLE_DEBUG ]; then
+    git checkout $checkout --quiet
+  else
+    git checkout $checkout
   fi
 
   echo "Running setups tasks for Ansible."

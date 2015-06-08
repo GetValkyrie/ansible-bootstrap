@@ -1,14 +1,15 @@
 #!/bin/sh
 
-ANSIBLE_STABLE_BRANCH=stable-1.9
-
 if [ "$(id -u)" != "0" ]; then
   echo "Sorry, this script must be run as root."
   exit 1
 fi
 
-while getopts ":c:d" opt; do
+while getopts ":b:c:d" opt; do
   case $opt in
+    b)
+      branch=$OPTARG
+      ;;
     c)
       checkout=$OPTARG
       ;;
@@ -38,13 +39,25 @@ if [ $? -eq 1 ]; then
     apt-get --force-yes install git python-setuptools python-dev
   fi
 
+  if [ -z $branch ] && [ ! -z $ANSIBLE_BRANCH ]; then
+    echo "Setting branch from environment."
+    branch=$ANSIBLE_BRANCH
+  fi
+
+  if [ -z $branch ]; then
+    branch=''
+  else
+    echo "Using $branch branch."
+    branch="--branch $branch"
+  fi
+
   ansible_dir=/usr/local/lib/ansible/
   if [ ! -d $ansible_dir ]; then
     echo "Cloning Ansible."
     if [ -z $ANSIBLE_DEBUG ]; then
-      git clone --quiet --recursive git://github.com/ansible/ansible.git $ansible_dir > /dev/null 2>&1
+      git clone --quiet --recursive git://github.com/ansible/ansible.git $branch $ansible_dir > /dev/null 2>&1
     else
-      git clone --recursive git://github.com/ansible/ansible.git $ansible_dir
+      git clone --recursive git://github.com/ansible/ansible.git $branch $ansible_dir
     fi
   fi
 
@@ -53,17 +66,14 @@ if [ $? -eq 1 ]; then
     checkout=$ANSIBLE_CHECKOUT
   fi
 
-  if [ -z $checkout ]; then
-    echo "Using default branch: $ANSIBLE_STABLE_BRANCH"
-    checkout=$ANSIBLE_STABLE_BRANCH
-  fi
-
-  echo "Checking out '$checkout'."
-  cd $ansible_dir
-  if [ -z $ANSIBLE_DEBUG ]; then
-    git checkout $checkout --quiet
-  else
-    git checkout $checkout
+  if [ ! -z $checkout ]; then
+    echo "Checking out '$checkout'."
+    cd $ansible_dir
+    if [ -z $ANSIBLE_DEBUG ]; then
+      git checkout $checkout --quiet
+    else
+      git checkout $checkout
+    fi
   fi
 
   echo "Running setups tasks for Ansible."

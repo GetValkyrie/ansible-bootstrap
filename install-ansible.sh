@@ -1,4 +1,5 @@
 #!/bin/sh
+ANSIBLE_STABLE_BRANCH=stable-1.9
 
 if [ "$(id -u)" != "0" ]; then
   echo "Sorry, this script must be run as root."
@@ -45,7 +46,8 @@ if [ $? -eq 1 ]; then
   fi
 
   if [ -z $branch ]; then
-    branch=''
+    echo "Using default stable branch: $ANSIBLE_STABLE_BRANCH."
+    branch="--branch $ANSIBLE_STABLE_BRANCH"
   else
     echo "Using $branch branch."
     branch="--branch $branch"

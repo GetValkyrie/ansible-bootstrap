@@ -37,7 +37,7 @@ if [ $? -eq 1 ]; then
     apt-get -qq --assume-yes install git python-setuptools python-dev > /dev/null 2>&1
   else
     apt-get --assume-yes update
-    apt-get --assume-yes install git python-setuptools python-dev
+    apt-get --assume-yes install git python-setuptools python-dev python-paramiko python-yaml python-jinja2 python-httplib2 python-passlib python-six python-ecdsa
   fi
 
   if [ -z $branch ] && [ ! -z $ANSIBLE_BRANCH ]; then
